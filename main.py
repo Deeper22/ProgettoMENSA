@@ -1,16 +1,39 @@
-# This is a sample Python script.
-
-# Press Maiusc+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+class Persona():
+    def __init__(self):
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+        #FUNZIONE CONTROLLO STRINGA
+        def ControlloSTR(stringa):
+            while any(char.isdigit() for char in stringa) or len(stringa)==0:
+                print('Errore! Inserire stringa non vuota')
+                stringa = input()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+        #INSERIMENTO E CONTROLLO NOME
+        nome = input('Inserisci nome: ')
+        ControlloSTR(nome)
+        self.nome = nome
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+        #INSERIMENTO E CONTROLLO COGNOME
+        cognome = input('Inserisci cognome: ')
+        ControlloSTR(cognome)
+        self.cognome = cognome
+
+        #INSERIMENTO E CONTROLLO MATRICOLA
+        matricola = input('Inserisci matricola: ')
+        while not matricola.isdigit() or len(matricola)!=7:
+            print('Errore! Inserisci numero di 7 cifre')
+            matricola = input('Inserisci matricola: ')
+        self.matricola = matricola
+
+
+
+
+persona1 = Persona()
+
+
+
+
+
+
+
