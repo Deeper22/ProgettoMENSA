@@ -1,7 +1,6 @@
 class Persona():
     def __init__(self):
 
-
         #FUNZIONE CONTROLLO NOME E COGNOME
         def ControlloSTR(stringa):
             while any(char.isdigit() for char in stringa) or len(stringa)==0:
@@ -29,11 +28,17 @@ class Persona():
         ControlloMTR(matricola)
         self.matricola = matricola
 
-class Menu():
-    def __init__(self, primo, secondo, contorno):
-        self.primo = ['Pasta', 'Zuppa', 'Riso']
-        self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
-        self.contorno = ['Carote', 'Insalata', 'Patate']
+class Mensa():
+
+
+
+
+
+# class Menu():
+#     def __init__(self, primo, secondo, contorno):
+#         self.primo = ['Pasta', 'Zuppa', 'Riso']
+#         self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
+#         self.contorno = ['Carote', 'Insalata', 'Patate']
 
 # bho ho fatto na cosa a caso
 
