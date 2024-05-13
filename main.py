@@ -29,6 +29,7 @@ class Persona():
         self.matricola = matricola
 
 class Mensa():
+    pass
 
 
 
