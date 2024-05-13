@@ -46,7 +46,17 @@ class Utente():
 
 
 class Mensa():
-    pass
+    def __init__(self):
+        self.posti_disponibili = 5
+
+
+
+
+
+utente1 = Utente()
+
+mensa = Mensa()
+utente1.controlla_posto()
 
 
 
@@ -55,11 +65,11 @@ class Mensa():
 
 
 
-# class Menu():
-#     def __init__(self, primo, secondo, contorno):
-#         self.primo = ['Pasta', 'Zuppa', 'Riso']
-#         self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
-#         self.contorno = ['Carote', 'Insalata', 'Patate']
+class Menu():
+    def __init__(self):
+        self.primo = ['Pasta', 'Zuppa', 'Riso']
+        self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
+        self.contorno = ['Carote', 'Insalata', 'Finocchi']
 
 
 menu = Menu()
