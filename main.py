@@ -1,5 +1,9 @@
-class Persona():
+import sys
+
+
+class Utente():
     def __init__(self):
+
 
         #FUNZIONE CONTROLLO NOME E COGNOME
         def ControlloSTR(stringa):
@@ -12,6 +16,7 @@ class Persona():
             while not matr.isdigit() or len(matr)!=7:
                 print('Errore! Inserisci numero di 7 cifre')
                 matr = input('Inserisci matricola: ')
+
 
         #INSERIMENTO E CONTROLLO NOME
         nome = input('Inserisci nome: ')
@@ -28,8 +33,24 @@ class Persona():
         ControlloMTR(matricola)
         self.matricola = matricola
 
+    def controlla_posto(self):
+        if mensa.posti_disponibili == 0:
+            print('Nessun posto disponibile')
+            sys.exit()
+        else:
+            mensa.posti_disponibili -= 1
+            print('Posto disponibile!\nPosti ancora disponibili: ' + str(mensa.posti_disponibili))
+
+    #def scelta(self):
+
+
+
 class Mensa():
     pass
+
+
+
+
 
 
 
@@ -41,9 +62,9 @@ class Mensa():
 #         self.contorno = ['Carote', 'Insalata', 'Patate']
 
 
+menu = Menu()
 
-
-persona1 = Persona()
+print(menu.primo[1])
 
 
 
