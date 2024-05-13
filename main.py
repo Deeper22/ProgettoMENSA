@@ -33,14 +33,13 @@ class Mensa():
 
 
 
-
 # class Menu():
 #     def __init__(self, primo, secondo, contorno):
 #         self.primo = ['Pasta', 'Zuppa', 'Riso']
 #         self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
 #         self.contorno = ['Carote', 'Insalata', 'Patate']
 
-# bho ho fatto na cosa a caso
+
 
 
 persona1 = Persona()
