@@ -64,12 +64,12 @@ class Utente():
         # SCELTA DEL PRIMO
         time.sleep(1)
 
-        self.funzione(menu.primo)
-        self.funzione(menu.secondo)
-        self.funzione(menu.contorno)
+        self.funzione(menu.primo, menu.contaprimo)
+        self.funzione(menu.secondo, menu.contasecondo)
+        self.funzione(menu.contorno, menu.contacontorno)
 
 
-    def funzione(self, pietanza):
+    def funzione(self, pietanza, vettore):
 
         print('\nScegli piatto: ')
 
@@ -81,35 +81,31 @@ class Utente():
         while not (piatto_scelto.isdigit() and 1 <= int(piatto_scelto) <= len(pietanza)):
             piatto_scelto = input('Piatto non accettato. Riprova: ')
 
+        vettore[int(piatto_scelto)-1] += 1
+
+        with open('ordini.pkl', 'ab') as ordini:
+            pickle.dump(vettore, ordini)
+
+
         print('Hai scelto ' + (pietanza[int(piatto_scelto) - 1]))
 
 
-
 class Mensa():
-
-
-
 
     def __init__(self):
         with open('posti.pkl', 'rb') as posti:
             self.posti_disponibili = pickle.load(posti)
 
 
-
-
-
-
 class Menu():
     def __init__(self):
         self.primo = ['Pasta', 'Zuppa', 'Riso','Pomodoro', 'Risotto']
-        self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
+        self.secondo = ['Maiale', 'Manzo', 'Mozzarella', 'Funghi']
         self.contorno = ['Carote', 'Insalata', 'Finocchi']
 
         self.contaprimo = [0 for x in self.primo]
         self.contasecondo = [0 for x in self.secondo]
         self.contacontorno = [0 for x in self.contorno]
-
-
 
 
 utente1 = Utente()
@@ -118,13 +114,17 @@ mensa = Mensa()
 
 utente1.controlla_posto()
 
-
-
 menu = Menu()
 
 utente1.scelta()
 
+print(menu.contaprimo)
+print(menu.contasecondo)
+print(menu.contacontorno)
 
+with open('ordini.pkl', 'rb') as ordini:
+    vettore = pickle.load(ordini)
+    print(vettore)
 
 
 
