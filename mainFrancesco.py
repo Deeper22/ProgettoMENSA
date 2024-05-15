@@ -40,26 +40,20 @@ class Utente():
         time.sleep(1)
 
         if mensa.posti_disponibili == 0:
-
-            # SCOMMENTA PER RESET PICKLE
-
-            # with open('posti.pkl', 'wb') as posti:
-            #     pickle.dump(100, posti)
-            # mensa.posti_disponibili = 100
-
             print('\nNessun posto disponibile')
             sys.exit()
-
         else:
             mensa.posti_disponibili -= 1
-
             with open('posti.pkl', 'wb') as posti:
                 pickle.dump(mensa.posti_disponibili, posti)
 
             print('\nPosto disponibile!\nPosti ancora disponibili: ' + str(mensa.posti_disponibili))
 
 
+
+
     #SCELTA DEI PIATTI DA MANGIARE
+
     def scelta(self):
         # SCELTA DEL PRIMO
         time.sleep(1)
@@ -74,14 +68,22 @@ class Utente():
         print('\nScegli piatto: ')
 
         for i in range(len(pietanza)):
-            print(str(i + 1) + ') ' + pietanza[i])
+            print(str(i+1) + ') ' + pietanza[i])
 
         time.sleep(1)
         piatto_scelto = input('Digita il numero del piatto desiderato: ')
         while not (piatto_scelto.isdigit() and 1 <= int(piatto_scelto) <= len(pietanza)):
             piatto_scelto = input('Piatto non accettato. Riprova: ')
 
-        print('Hai scelto ' + (pietanza[int(piatto_scelto) - 1]))
+        print('Hai scelto ' + (pietanza[int(piatto_scelto)-1]))
+
+
+
+
+
+
+
+
 
 
 
@@ -101,6 +103,7 @@ class Mensa():
 
 class Menu():
     def __init__(self):
+        self.pietanza = 0
         self.primo = ['Pasta', 'Zuppa', 'Riso','Pomodoro', 'Risotto']
         self.secondo = ['Maiale', 'Manzo', 'Mozzarella']
         self.contorno = ['Carote', 'Insalata', 'Finocchi']
@@ -116,16 +119,10 @@ utente1 = Utente()
 
 mensa = Mensa()
 
+
+
 utente1.controlla_posto()
-
-
 
 menu = Menu()
 
 utente1.scelta()
-
-
-
-
-
-
