@@ -56,7 +56,7 @@ class Utente():
             print(str(i+1) + ') ' + menu.primo[i])
 
         time.sleep(1)
-        primo_scelto = input('Digita il numero del piatto desiderato:')
+        primo_scelto = input('Digita il numero del piatto desiderato: ')
         while not (primo_scelto.isdigit() and 1 <= int(primo_scelto) <= len(menu.primo)):
             primo_scelto = input('Piatto non accettato. Riprova: ')
         print('Hai scelto ' + (menu.primo[int(primo_scelto)-1]))
