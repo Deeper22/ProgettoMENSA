@@ -52,7 +52,7 @@ class Utente():
 
     def scelta(self):
 
-        time.sleep(2)
+        time.sleep(1)
         print('\nScegli primo piatto: ')
 
         for i in range(len(menu.primo)):
