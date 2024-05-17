@@ -5,7 +5,6 @@ import pickle
 class Utente():
     def __init__(self):
 
-
         #FUNZIONE CONTROLLO NOME E COGNOME
         def ControlloSTR(stringa):
             while any(char.isdigit() for char in stringa) or len(stringa)==0:
@@ -58,35 +57,37 @@ class Utente():
 
             print('\nPosto disponibile!\nPosti ancora disponibili: ' + str(mensa.posti_disponibili))
 
+    def aggiornaPickle(self, nome_file, vett_pickle):
+        with open(nome_file+'.pkl', 'r+b') as nome_file:
+            vett_temp = pickle.load(nome_file)
+            nome_file.seek(0)
+            vett_pickle = [x + y for x, y in zip(vett_temp, vett_pickle)]
+            pickle.dump(vett_pickle, nome_file)
+
 
     #SCELTA DEI PIATTI DA MANGIARE
-    def pickleF(self):
-        # SCELTA DEL PRIMO
+    def riepilogo_salvataggio(self):
+
         time.sleep(1)
 
-        vettoreprimi = self.scelta(menu.primo, menu.contaprimo, 'primo')
-        with open('primi.pkl', 'r+b') as file_primi:
+        vettoreprimi, primo_scelto = self.scelta(menu.primo, menu.contaprimo, 'primo')
 
-            vett_primi_pickle = pickle.load(file_primi)
-            file_primi.seek(0)
-            vettoreprimi = [x + y for x, y in zip(vett_primi_pickle, vettoreprimi)]
-            pickle.dump(vettoreprimi, file_primi)
+        vettoresecondi, secondo_scelto = self.scelta(menu.secondo, menu.contasecondo, 'secondo')
 
-        vettoresecondi = self.scelta(menu.secondo, menu.contasecondo, 'secondo')
-        with open('secondi.pkl', 'r+b') as file_secondi:
+        vettorecontorni, contorno_scelto = self.scelta(menu.contorno, menu.contacontorno, 'contorno')
 
-            vett_secondi_pickle = pickle.load(file_secondi)
-            file_secondi.seek(0)
-            vettoresecondi = [x + y for x, y in zip(vett_secondi_pickle, vettoresecondi)]
-            pickle.dump(vettoresecondi, file_secondi)
+        print('\nHai scelto: {}, {}, {}.'.format(menu.primo[int(primo_scelto)-1],menu.secondo[int(secondo_scelto)-1],menu.contorno[int(contorno_scelto)-1]))
+        conferma = input('\nInviare ordine? (si/no): ')
+        while conferma != 'si' and conferma != 'no':
+            conferma = input('Risposta non valida. Riprova: ')
+        if conferma == 'si':
+            print('Ordine invitato!')
+            self.aggiornaPickle('primi', vettoreprimi)
+            self.aggiornaPickle('secondi', vettoresecondi)
+            self.aggiornaPickle('contorni', vettorecontorni)
+        else:
+            self.riepilogo_salvataggio()
 
-        vettorecontorni = self.scelta(menu.contorno, menu.contacontorno, 'contorno')
-        with open('contorni.pkl', 'r+b') as file_contorni:
-
-            vett_contorni_pickle = pickle.load(file_contorni)
-            file_contorni.seek(0)
-            vettorecontorni = [x + y for x, y in zip(vett_contorni_pickle, vettorecontorni)]
-            pickle.dump(vettorecontorni, file_contorni)
 
     def scelta(self, pietanza, vettore, tipo):
 
@@ -102,7 +103,9 @@ class Utente():
         vettore[int(piatto_scelto)-1] += 1
 
         print('Hai scelto ' + (pietanza[int(piatto_scelto) - 1]))
-        return vettore
+
+        return vettore, piatto_scelto
+
 
 class Mensa():
 
@@ -115,7 +118,7 @@ class Menu():
     def __init__(self):
         self.primo = ['Pasta', 'Zuppa', 'Riso','Pomodoro', 'Risotto']
         self.secondo = ['Maiale', 'Manzo', 'Mozzarella', 'Funghi']
-        self.contorno = ['Carote', 'Insalata', 'Finocchi']
+        self.contorno = ['Carote', 'Insalata', 'Finocchi', 'Patate']
 
         self.contaprimo = [0 for x in self.primo]
         self.contasecondo = [0 for x in self.secondo]
@@ -130,12 +133,11 @@ utente1.controlla_posto()
 
 menu = Menu()
 
-utente1.pickleF()
+utente1.riepilogo_salvataggio()
 
-print(menu.contaprimo)
-print(menu.contasecondo)
-print(menu.contacontorno)
-
+# print(menu.contaprimo)
+# print(menu.contasecondo)
+# print(menu.contacontorno)
 
 
 with open('primi.pkl', 'rb') as file_primi:
