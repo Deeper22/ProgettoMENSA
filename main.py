@@ -60,35 +60,49 @@ class Utente():
 
 
     #SCELTA DEI PIATTI DA MANGIARE
-    def scelta(self):
+    def pickleF(self):
         # SCELTA DEL PRIMO
         time.sleep(1)
 
-        self.funzione(menu.primo, menu.contaprimo)
-        self.funzione(menu.secondo, menu.contasecondo)
-        self.funzione(menu.contorno, menu.contacontorno)
+        vettoreprimi = self.scelta(menu.primo, menu.contaprimo, 'primo')
+        with open('primi.pkl', 'r+b') as file_primi:
 
+            vett_primi_pickle = pickle.load(file_primi)
+            file_primi.seek(0)
+            vettoreprimi = [x + y for x, y in zip(vett_primi_pickle, vettoreprimi)]
+            pickle.dump(vettoreprimi, file_primi)
 
-    def funzione(self, pietanza, vettore):
+        vettoresecondi = self.scelta(menu.secondo, menu.contasecondo, 'secondo')
+        with open('secondi.pkl', 'r+b') as file_secondi:
 
-        print('\nScegli piatto: ')
+            vett_secondi_pickle = pickle.load(file_secondi)
+            file_secondi.seek(0)
+            vettoresecondi = [x + y for x, y in zip(vett_secondi_pickle, vettoresecondi)]
+            pickle.dump(vettoresecondi, file_secondi)
+
+        vettorecontorni = self.scelta(menu.contorno, menu.contacontorno, 'contorno')
+        with open('contorni.pkl', 'r+b') as file_contorni:
+
+            vett_contorni_pickle = pickle.load(file_contorni)
+            file_contorni.seek(0)
+            vettorecontorni = [x + y for x, y in zip(vett_contorni_pickle, vettorecontorni)]
+            pickle.dump(vettorecontorni, file_contorni)
+
+    def scelta(self, pietanza, vettore, tipo):
+
+        print('\nScegli ' +tipo+ ': ')
 
         for i in range(len(pietanza)):
             print(str(i + 1) + ') ' + pietanza[i])
 
-        time.sleep(1)
         piatto_scelto = input('Digita il numero del piatto desiderato: ')
         while not (piatto_scelto.isdigit() and 1 <= int(piatto_scelto) <= len(pietanza)):
             piatto_scelto = input('Piatto non accettato. Riprova: ')
 
         vettore[int(piatto_scelto)-1] += 1
 
-        with open('ordini.pkl', 'ab') as ordini:
-            pickle.dump(vettore, ordini)
-
-
         print('Hai scelto ' + (pietanza[int(piatto_scelto) - 1]))
-
+        return vettore
 
 class Mensa():
 
@@ -116,15 +130,25 @@ utente1.controlla_posto()
 
 menu = Menu()
 
-utente1.scelta()
+utente1.pickleF()
 
 print(menu.contaprimo)
 print(menu.contasecondo)
 print(menu.contacontorno)
 
-with open('ordini.pkl', 'rb') as ordini:
-    vettore = pickle.load(ordini)
-    print(vettore)
+
+
+with open('primi.pkl', 'rb') as file_primi:
+    print(pickle.load(file_primi))
+
+with open('secondi.pkl', 'rb') as file_secondi:
+    print(pickle.load(file_secondi))
+
+with open('contorni.pkl', 'rb') as file_contorni:
+    print(pickle.load(file_contorni))
+
+
+
 
 
 
