@@ -3,6 +3,7 @@ import time
 import pickle
 
 class Utente():
+
     def __init__(self):
 
         #FUNZIONE CONTROLLO NOME E COGNOME
@@ -31,6 +32,9 @@ class Utente():
         matricola = input('Inserisci matricola: ')
         ControlloMTR(matricola)
         self.matricola = matricola
+
+        self.controlla_posto()
+        self.riepilogo_salvataggio()
 
 
     #CONTROLLO DISPONIBILITA POSTI IN MENSA
@@ -113,6 +117,22 @@ class Utente():
         return vettore, piatto_scelto
 
 
+class Admin():
+    def __init__(self):
+
+        self.password_admin = 'admin'
+
+        password_inserita = input('Inserisci password ADMIN: ')
+        while (password_inserita != self.password_admin) or (password_inserita == ''):
+            password_inserita = input('Password ERRATA. Riprova: ')
+
+    def Menu_Admin(self):
+
+        
+
+
+
+
 class Mensa():
 
     def __init__(self):
@@ -121,13 +141,12 @@ class Mensa():
 
     def stampa_ordini(self):
         pasti = ['primi', 'secondi', 'contorni']
-        for pasto in pasti:  # Iteriamo sui nomi dei pasti
-            file_path = pasto + '.pkl'
-            print(f"\nOrdini per i {pasto}:")
-            with open(file_path, 'rb') as file_ordine:
+        for pasto in pasti:
+            print("\nOrdini per i {}:".format(pasto))
+            with open(pasto + '.pkl', 'rb') as file_ordine:
                 vett_ordini = pickle.load(file_ordine)
                 for idx, ordine in enumerate(vett_ordini):
-                    print(f"{ordine}x {menu.__dict__[pasto][idx]}")
+                    print("{}: {}".format(menu.__dict__[pasto][idx], ordine))
 
 
 class Menu():
@@ -140,20 +159,24 @@ class Menu():
         self.contasecondo = [0 for x in self.secondi]
         self.contacontorno = [0 for x in self.contorni]
 
-
-utente1 = Utente()
-
 mensa = Mensa()
-
-utente1.controlla_posto()
-
 menu = Menu()
 
-utente1.riepilogo_salvataggio()
+login_digit = int(input('Accedi come:\n1. Utente\n2. Admin\n'))
+while (login_digit != 1) and (login_digit != 2):
+    login_digit = input('Inserimento non valido. Riprova: ')
 
-# print(menu.contaprimo)
-# print(menu.contasecondo)
-# print(menu.contacontorno)
+if login_digit == 1:
+    utente1 = Utente()
+elif login_digit == 2:
+    admin1 = Admin()
+
+
+mensa.stampa_ordini()
+
+#utente1.controlla_posto()
+#utente1.riepilogo_salvataggio()
+
 
 #
 # with open('primi.pkl', 'rb') as file_primi:
@@ -164,10 +187,6 @@ utente1.riepilogo_salvataggio()
 #
 # with open('contorni.pkl', 'rb') as file_contorni:
 #     print(pickle.load(file_contorni))
-
-mensa.stampa_ordini()
-
-
 
 
 
