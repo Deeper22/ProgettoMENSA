@@ -8,7 +8,7 @@ class Utente():
 
         #FUNZIONE CONTROLLO NOME E COGNOME
         def ControlloSTR(stringa):
-            while any(char.isdigit() for char in stringa) or len(stringa)==0:
+            while any(lettera.isdigit() for lettera in stringa) or len(stringa)==0:
                 print('Errore! Inserire stringa non vuota')
                 stringa = input()
 
@@ -34,6 +34,7 @@ class Utente():
         self.matricola = matricola
 
         self.controlla_posto()
+
         self.riepilogo_salvataggio()
 
 
@@ -43,12 +44,6 @@ class Utente():
         time.sleep(1)
 
         if mensa.posti_disponibili == 0:
-
-            # SCOMMENTA PER RESET PICKLE
-
-            # with open('posti.pkl', 'wb') as posti:
-            #     pickle.dump(100, posti)
-            # mensa.posti_disponibili = 100
 
             print('\nNessun posto disponibile')
             sys.exit()
@@ -79,6 +74,7 @@ class Utente():
     def riepilogo_salvataggio(self):
 
         time.sleep(1)
+        print('\n\tSCELTA PASTI')
 
         vettoreprimi, primo_scelto = self.scelta(menu.primi, menu.contaprimo, 'primo')
 
@@ -126,20 +122,40 @@ class Admin():
         while (password_inserita != self.password_admin) or (password_inserita == ''):
             password_inserita = input('Password ERRATA. Riprova: ')
 
+        self.Menu_Admin()
+
     def Menu_Admin(self):
+        print('\n\tMENU ADMIN\n')
+        admin_digit = input("1. Resetta posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Ritorna al login\n\nInserisci numero dell'operazione desiderata: ")
+        while admin_digit not in ('1','2','3','4'):
+            admin_digit = input('Inserimento non valido. Riprova: ')
+        if admin_digit == '1':
+            self.reset_posti()
+        elif admin_digit == '2':
+            self.cambia_menu()
+        elif admin_digit == '3':
+            self.visualizza_ordini()
+        elif admin_digit == '4':
+            Login()
 
-        
+    def reset_posti(self):
 
+        input_posti = input('Quanti posti vuoi rendere disponibili?: ')
+        while not input_posti.isdigit():
+            input_posti = input('Inserimento non valido. Riprova: ')
+        posti_int = int(input_posti)
 
+        with open('posti.pkl', 'wb') as posti:
+            pickle.dump(posti_int, posti)
+        #mensa.posti_disponibili = posti_int
+        print('Sono ora disponibili {} posti.'.format(posti_int))
 
+        self.Menu_Admin()
 
-class Mensa():
+    def cambia_menu(self):
+        pass
 
-    def __init__(self):
-        with open('posti.pkl', 'rb') as posti:
-            self.posti_disponibili = pickle.load(posti)
-
-    def stampa_ordini(self):
+    def visualizza_ordini(self):
         pasti = ['primi', 'secondi', 'contorni']
         for pasto in pasti:
             print("\nOrdini per i {}:".format(pasto))
@@ -148,12 +164,18 @@ class Mensa():
                 for idx, ordine in enumerate(vett_ordini):
                     print("{}: {}".format(menu.__dict__[pasto][idx], ordine))
 
+class Mensa():
+
+    def __init__(self):
+        with open('posti.pkl', 'rb') as posti:
+            self.posti_disponibili = pickle.load(posti)
+
 
 class Menu():
     def __init__(self):
         self.primi = ['Pasta', 'Zuppa', 'Riso']
-        self.secondi = ['Maiale', 'Manzo', 'Mozzarella', 'Funghi', 'Carciofi']
-        self.contorni = ['Carote', 'Insalata', 'Finocchi', 'Patate']
+        self.secondi = ['Maiale', 'Manzo', 'Mozzarella']
+        self.contorni = ['Carote', 'Insalata', 'Finocchi']
 
         self.contaprimo = [0 for x in self.primi]
         self.contasecondo = [0 for x in self.secondi]
@@ -162,17 +184,19 @@ class Menu():
 mensa = Mensa()
 menu = Menu()
 
-login_digit = int(input('Accedi come:\n1. Utente\n2. Admin\n'))
-while (login_digit != 1) and (login_digit != 2):
-    login_digit = input('Inserimento non valido. Riprova: ')
+def Login():
+    login_digit = input('Accedi come:\n1. Utente\n2. Admin\n')
+    while (login_digit != '1') and (login_digit != '2'):
+        login_digit = input('Inserimento non valido. Riprova: ')
 
-if login_digit == 1:
-    utente1 = Utente()
-elif login_digit == 2:
-    admin1 = Admin()
+    if login_digit == '1':
+        utente1 = Utente()
+    elif login_digit == '2':
+        admin1 = Admin()
 
 
-mensa.stampa_ordini()
+
+Login()
 
 #utente1.controlla_posto()
 #utente1.riepilogo_salvataggio()
