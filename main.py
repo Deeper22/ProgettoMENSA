@@ -2,35 +2,36 @@ import sys
 import time
 import pickle
 
+
+
 class Utente():
+
+    def ControlloSTR(self, stringa):
+        while any(lettera.isdigit() for lettera in stringa) or len(stringa)==0:
+            print('Errore! Inserire stringa non vuota')
+            stringa = input()
+
+
+    def ControlloMTR(self, matr):
+        while not matr.isdigit() or len(matr)!=7:
+            print('Errore! Inserisci numero di 7 cifre')
+            matr = input('Inserisci matricola: ')
 
     def __init__(self):
 
-        #FUNZIONE CONTROLLO NOME E COGNOME
-        def ControlloSTR(stringa):
-            while any(lettera.isdigit() for lettera in stringa) or len(stringa)==0:
-                print('Errore! Inserire stringa non vuota')
-                stringa = input()
-
-        #FUNZIONE CONTROLLO MATRICOLA
-        def ControlloMTR(matr):
-            while not matr.isdigit() or len(matr)!=7:
-                print('Errore! Inserisci numero di 7 cifre')
-                matr = input('Inserisci matricola: ')
-
         #INSERIMENTO E CONTROLLO NOME
         nome = input('Inserisci nome: ')
-        ControlloSTR(nome)
+        self.ControlloSTR(nome)
         self.nome = nome
 
         #INSERIMENTO E CONTROLLO COGNOME
         cognome = input('Inserisci cognome: ')
-        ControlloSTR(cognome)
+        self.ControlloSTR(cognome)
         self.cognome = cognome
 
         #INSERIMENTO E CONTROLLO MATRICOLA
         matricola = input('Inserisci matricola: ')
-        ControlloMTR(matricola)
+        self.ControlloMTR(matricola)
         self.matricola = matricola
 
         self.controlla_posto()
@@ -153,7 +154,35 @@ class Admin():
         self.Menu_Admin()
 
     def cambia_menu(self):
-        pass
+        print('\n\t  CAMBIO MENU\n(comporta il reset ordini)')
+        primi_inseriti = input('\nDigita i primi da inserire, separati da una virgola:\n').split(',')
+        secondi_inseriti = input('Digita i secondi da inserire, separati da una virgola:\n').split(',')
+        contorni_inseriti = input('Digita i contorni da inserire, separati da una virgola:\n').split(',')
+
+        primi_inseriti = [item.strip() for item in primi_inseriti]
+        secondi_inseriti = [item.strip() for item in secondi_inseriti]
+        contorni_inseriti = [item.strip() for item in contorni_inseriti]
+
+        menu.primi = primi_inseriti
+        menu.secondi = secondi_inseriti
+        menu.contorni = contorni_inseriti
+
+        with open('menu.pkl', 'wb') as file_menu:
+            menu_agg_pickle = {
+                'primi' : menu.primi,
+                'secondi' : menu.secondi,
+                'contorni' : menu.contorni
+            }
+            pickle.dump(menu_agg_pickle, file_menu)
+
+        pasti = ['primi', 'secondi', 'contorni']
+        for pasto in pasti:
+            with open(pasto + '.pkl', 'wb') as file_ordine:
+                pickle.dump([0] * len(menu.__dict__[pasto]), file_ordine)
+
+        print('\nMenu aggiornato e ordini resettati con successo!')
+        self.Menu_Admin()
+
 
     def visualizza_ordini(self):
         pasti = ['primi', 'secondi', 'contorni']
@@ -164,6 +193,8 @@ class Admin():
                 for idx, ordine in enumerate(vett_ordini):
                     print("{}: {}".format(menu.__dict__[pasto][idx], ordine))
 
+        self.Menu_Admin()
+
 class Mensa():
 
     def __init__(self):
@@ -173,9 +204,21 @@ class Mensa():
 
 class Menu():
     def __init__(self):
-        self.primi = ['Pasta', 'Zuppa', 'Riso']
-        self.secondi = ['Maiale', 'Manzo', 'Mozzarella']
-        self.contorni = ['Carote', 'Insalata', 'Finocchi']
+
+        with open('menu.pkl', 'rb') as file_menu:
+            menu_pickle = pickle.load(file_menu)
+            self.primi = menu_pickle['primi']
+            self.secondi = menu_pickle['secondi']
+            self.contorni = menu_pickle['contorni']
+
+        # with open('menu.pkl', 'wb') as file_menu:
+        #     menu_pickle = {
+        #         'primi' : self.primi,
+        #         'secondi' : self.secondi,
+        #         'contorni' : self.contorni,
+        #     }
+        #     pickle.dump(menu_pickle, file_menu)
+
 
         self.contaprimo = [0 for x in self.primi]
         self.contasecondo = [0 for x in self.secondi]
@@ -193,7 +236,6 @@ def Login():
         utente1 = Utente()
     elif login_digit == '2':
         admin1 = Admin()
-
 
 
 Login()
