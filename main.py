@@ -2,20 +2,37 @@ import sys
 import time
 import pickle
 
+
 class Utente():
 
     def ControlloSTR(self, stringa):
-        while any(lettera.isdigit() for lettera in stringa) or len(stringa)==0:
+        while any(lettera.isdigit() for lettera in stringa) or len(stringa) == 0:
             print('Errore! Inserire stringa non vuota')
             stringa = input()
 
-
     def ControlloMTR(self, matr):
-        while not matr.isdigit() or len(matr)!=7:
+        while not matr.isdigit() or len(matr) != 7:
             print('Errore! Inserisci numero di 7 cifre')
             matr = input('Inserisci matricola: ')
 
     def __init__(self):
+
+        print('\n\tMENU UTENTE')
+        utente_digit = input("\n1. Leggi menu\n2. Prenota\n3. Torna al login\n4. Chiudi programma\n\n"
+                             "Inserisci numero dell'operazione desiderata: ")
+        while utente_digit not in ('1', '2', '3', '4'):
+            utente_digit = input('\nInserimento non valido. Riprova: ')
+        if utente_digit == '1':
+            print('Primi: {}\nSecondi: {}\nContorni: {}'.format(', '.join(menu.primi), ', '.join(menu.secondi), ', '.join(menu.contorni)))
+            input('\nPremi invio per tornare al login')
+            Login()
+        elif utente_digit == '2':
+            pass
+        elif utente_digit == '3':
+            print('')
+            Login()
+        elif utente_digit == '4':
+            sys.exit()
 
         #INSERIMENTO E CONTROLLO NOME
         nome = input('Inserisci nome: ')
@@ -45,7 +62,6 @@ class Utente():
 
         self.riepilogo_salvataggio()
 
-
     #CONTROLLO DISPONIBILITA POSTI IN MENSA
     def controlla_posto(self):
 
@@ -65,8 +81,7 @@ class Utente():
             print('\nPosto disponibile!\nPosti ancora disponibili: ' + str(mensa.posti_disponibili))
 
     def aggiornaPickle(self, nome_file, vett_pickle):
-        with open(nome_file+'.pkl', 'rb+') as nome_file:
-
+        with open(nome_file + '.pkl', 'rb+') as nome_file:
             vett_temp = pickle.load(nome_file)
             # if len(vett_temp) != len(vett_pickle):
             #     nome_file.seek(0)   #Si porta il puntatore del file all'inizio per sovrascrivere
@@ -76,7 +91,6 @@ class Utente():
             nome_file.seek(0)
             vett_pickle = [x + y for x, y in zip(vett_temp, vett_pickle)]
             pickle.dump(vett_pickle, nome_file)
-
 
     #SCELTA DEI PIATTI DA MANGIARE
     def riepilogo_salvataggio(self):
@@ -90,7 +104,9 @@ class Utente():
 
         vettorecontorni, contorno_scelto = self.scelta(menu.contorni, menu.contacontorno, 'contorno')
 
-        print('\nHai scelto: {}, {}, {}.'.format(menu.primi[int(primo_scelto) - 1], menu.secondi[int(secondo_scelto) - 1], menu.contorni[int(contorno_scelto) - 1]))
+        print(
+            '\nHai scelto: {}, {}, {}.'.format(menu.primi[int(primo_scelto) - 1], menu.secondi[int(secondo_scelto) - 1],
+                                               menu.contorni[int(contorno_scelto) - 1]))
         conferma = input('\nInviare ordine? (si/no): ')
         while conferma != 'si' and conferma != 'no':
             conferma = input('Risposta non valida. Riprova: ')
@@ -102,10 +118,9 @@ class Utente():
         else:
             self.riepilogo_salvataggio()
 
-
     def scelta(self, pietanza, vettore, tipo):
 
-        print('\nScegli ' +tipo+ ': ')
+        print('\nScegli ' + tipo + ': ')
 
         for i in range(len(pietanza)):
             print(str(i + 1) + ') ' + pietanza[i])
@@ -114,7 +129,7 @@ class Utente():
         while not (piatto_scelto.isdigit() and 1 <= int(piatto_scelto) <= len(pietanza)):
             piatto_scelto = input('Piatto non accettato. Riprova: ')
 
-        vettore[int(piatto_scelto)-1] += 1
+        vettore[int(piatto_scelto) - 1] += 1
 
         print('Hai scelto ' + (pietanza[int(piatto_scelto) - 1]))
 
@@ -134,8 +149,10 @@ class Admin():
 
     def Menu_Admin(self):
         print('\n\tMENU ADMIN\n')
-        admin_digit = input("1. Reset posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n5. Ritorna al login\n6. Esci dal programma\n\nInserisci numero dell'operazione desiderata: ")
-        while admin_digit not in ('1','2','3','4','5','6'):
+        admin_digit = input(
+            "1. Reset posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n"
+            "5. Ritorna al login\n6. Esci dal programma\n\nInserisci numero dell'operazione desiderata: ")
+        while admin_digit not in ('1', '2', '3', '4', '5', '6'):
             admin_digit = input('Inserimento non valido. Riprova: ')
         if admin_digit == '1':
             self.reset_posti()
@@ -146,6 +163,7 @@ class Admin():
         elif admin_digit == '4':
             self.reset_utenti()
         elif admin_digit == '5':
+            print('')
             Login()
         elif admin_digit == '6':
             sys.exit()
@@ -181,9 +199,9 @@ class Admin():
 
         with open('menu.pkl', 'wb') as file_menu:
             menu_agg_pickle = {
-                'primi' : menu.primi,
-                'secondi' : menu.secondi,
-                'contorni' : menu.contorni
+                'primi': menu.primi,
+                'secondi': menu.secondi,
+                'contorni': menu.contorni
             }
             pickle.dump(menu_agg_pickle, file_menu)
 
@@ -196,7 +214,6 @@ class Admin():
 
         input('\nPremi invio per tornare al menu')
         self.Menu_Admin()
-
 
     def visualizza_ordini(self):
         pasti = ['primi', 'secondi', 'contorni']
@@ -217,6 +234,7 @@ class Admin():
         input('\nPremi invio per tornare al menu')
         self.Menu_Admin()
 
+
 class Mensa():
 
     def __init__(self):
@@ -226,7 +244,6 @@ class Mensa():
 
 class Menu():
     def __init__(self):
-
         with open('menu.pkl', 'rb') as file_menu:
             menu_pickle = pickle.load(file_menu)
             self.primi = menu_pickle['primi']
@@ -241,15 +258,17 @@ class Menu():
         #     }
         #     pickle.dump(menu_pickle, file_menu)
 
-
         self.contaprimo = [0 for x in self.primi]
         self.contasecondo = [0 for x in self.secondi]
         self.contacontorno = [0 for x in self.contorni]
 
+
 mensa = Mensa()
 menu = Menu()
 
+
 def Login():
+    print('\n\tLOGIN')
     login_digit = input('Accedi come:\n1. Utente\n2. Admin\n')
     while (login_digit != '1') and (login_digit != '2'):
         login_digit = input('Inserimento non valido. Riprova: ')
@@ -261,8 +280,3 @@ def Login():
 
 
 Login()
-
-
-
-
-
