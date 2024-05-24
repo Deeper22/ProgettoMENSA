@@ -2,7 +2,6 @@ import sys
 import time
 import pickle
 
-
 class Utente():
 
     def ControlloSTR(self, stringa):
@@ -135,8 +134,8 @@ class Admin():
 
     def Menu_Admin(self):
         print('\n\tMENU ADMIN\n')
-        admin_digit = input("1. Resetta posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Ritorna al login\n5. Esci dal programma\n\nInserisci numero dell'operazione desiderata: ")
-        while admin_digit not in ('1','2','3','4','5'):
+        admin_digit = input("1. Reset posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n5. Ritorna al login\n6. Esci dal programma\n\nInserisci numero dell'operazione desiderata: ")
+        while admin_digit not in ('1','2','3','4','5','6'):
             admin_digit = input('Inserimento non valido. Riprova: ')
         if admin_digit == '1':
             self.reset_posti()
@@ -145,8 +144,10 @@ class Admin():
         elif admin_digit == '3':
             self.visualizza_ordini()
         elif admin_digit == '4':
-            Login()
+            self.reset_utenti()
         elif admin_digit == '5':
+            Login()
+        elif admin_digit == '6':
             sys.exit()
 
     def reset_posti(self):
@@ -206,6 +207,13 @@ class Admin():
                 for idx, ordine in enumerate(vett_ordini):
                     print("{}: {}".format(menu.__dict__[pasto][idx], ordine))
 
+        input('\nPremi invio per tornare al menu')
+        self.Menu_Admin()
+
+    def reset_utenti(self):
+        with open('utenti.txt', 'w') as file_utenti:
+            file_utenti.write('')
+        print('\nLista utenti prenotati svuotata con successo.')
         input('\nPremi invio per tornare al menu')
         self.Menu_Admin()
 
