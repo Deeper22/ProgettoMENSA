@@ -4,13 +4,13 @@ import pickle
 
 class Utente():
 
-    def ControlloSTR(self, stringa):
+    def controllo_Stringa(self, stringa):
         while any(lettera.isdigit() for lettera in stringa) or len(stringa) == 0:
             print('Errore! Inserire stringa non vuota')
             stringa = input()
         return stringa
 
-    def ControlloMTR(self, matr):
+    def controllo_Matricola(self, matr):
         while not matr.isdigit() or len(matr) != 7:
             print('Errore! Inserisci numero di 7 cifre')
             matr = input('Inserisci matricola: ')
@@ -37,15 +37,15 @@ class Utente():
 
         #INSERIMENTO E CONTROLLO NOME
         nome = input('Inserisci nome: ')
-        self.nome = self.ControlloSTR(nome)
+        self.nome = self.controllo_Stringa(nome)
 
         #INSERIMENTO E CONTROLLO COGNOME
         cognome = input('Inserisci cognome: ')
-        self.cognome = self.ControlloSTR(cognome)
+        self.cognome = self.controllo_Stringa(cognome)
 
         #INSERIMENTO E CONTROLLO MATRICOLA
         matricola = input('Inserisci matricola: ')
-        self.matricola = self.ControlloMTR(matricola)
+        self.matricola = self.controllo_Matricola(matricola)
 
         with open('utenti.txt', 'r') as file_utenti:
             for riga in file_utenti:
@@ -53,15 +53,15 @@ class Utente():
                     print('\nPrenotazione gia effetuata!')
                     sys.exit()
 
-        self.controlla_posto()
+        self.controlla_Posto()
 
         with open('utenti.txt', 'a') as file_utenti:
             file_utenti.write('{}-{}-{}\n'.format(self.nome,self.cognome,self.matricola))
 
-        self.riepilogo_salvataggio()
+        self.riepilogo_Salvataggio()
 
     #CONTROLLO DISPONIBILITA POSTI IN MENSA
-    def controlla_posto(self):
+    def controlla_Posto(self):
 
         time.sleep(1)
 
@@ -78,7 +78,7 @@ class Utente():
 
             print('\nPosto disponibile!\nPosti ancora disponibili: ' + str(mensa.posti_disponibili))
 
-    def aggiornaPickle(self, nome_file, vett_pickle):
+    def aggiorna_Pickle(self, nome_file, vett_pickle):
         with open(nome_file + '.pkl', 'rb+') as nome_file:
             vett_temp = pickle.load(nome_file)
             nome_file.seek(0)
@@ -86,7 +86,7 @@ class Utente():
             pickle.dump(vett_pickle, nome_file)
 
     #SCELTA DEI PIATTI DA MANGIARE
-    def riepilogo_salvataggio(self):
+    def riepilogo_Salvataggio(self):
 
         time.sleep(1)
         print('\n\tSCELTA PASTI')
@@ -105,12 +105,12 @@ class Utente():
             conferma = input('Risposta non valida. Riprova: ')
         if conferma == 'si':
             print('Ordine inviato!')
-            self.aggiornaPickle('primi', vettoreprimi)
-            self.aggiornaPickle('secondi', vettoresecondi)
-            self.aggiornaPickle('contorni', vettorecontorni)
+            self.aggiorna_Pickle('primi', vettoreprimi)
+            self.aggiorna_Pickle('secondi', vettoresecondi)
+            self.aggiorna_Pickle('contorni', vettorecontorni)
             sys.exit()
         else:
-            self.riepilogo_salvataggio()
+            self.riepilogo_Salvataggio()
 
     def scelta(self, pietanza, vettore, tipo):
 
@@ -139,9 +139,9 @@ class Admin():
         while (password_inserita != self.password_admin) or (password_inserita == ''):
             password_inserita = input('Password ERRATA. Riprova: ')
 
-        self.Menu_Admin()
+        self.menu_Admin()
 
-    def Menu_Admin(self):
+    def menu_Admin(self):
         print('\n\tMENU ADMIN\n')
         admin_digit = input(
             "1. Reset posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n"
@@ -149,20 +149,20 @@ class Admin():
         while admin_digit not in ('1', '2', '3', '4', '5', '6'):
             admin_digit = input('Inserimento non valido. Riprova: ')
         if admin_digit == '1':
-            self.reset_posti()
+            self.reset_Posti()
         elif admin_digit == '2':
-            self.cambia_menu()
+            self.cambia_Menu()
         elif admin_digit == '3':
-            self.visualizza_ordini()
+            self.visualizza_Ordini()
         elif admin_digit == '4':
-            self.reset_utenti()
+            self.reset_Utenti()
         elif admin_digit == '5':
             print('')
             Login()
         elif admin_digit == '6':
             sys.exit()
 
-    def reset_posti(self):
+    def reset_Posti(self):
 
         input_posti = input('Quanti posti vuoi rendere disponibili?: ')
         while not input_posti.isdigit():
@@ -175,9 +175,9 @@ class Admin():
         print('Sono ora disponibili {} posti.'.format(posti_int))
 
         input('\nPremi invio per tornare al menu')
-        self.Menu_Admin()
+        self.menu_Admin()
 
-    def cambia_menu(self):
+    def cambia_Menu(self):
         print('\n\t  CAMBIO MENU\n(comporta il reset ordini)')
         primi_inseriti = input('\nDigita i primi da inserire, separati da una virgola:\n').split(',')
         secondi_inseriti = input('Digita i secondi da inserire, separati da una virgola:\n').split(',')
@@ -207,9 +207,9 @@ class Admin():
         print('\nMenu aggiornato e ordini resettati con successo!')
 
         input('\nPremi invio per tornare al menu')
-        self.Menu_Admin()
+        self.menu_Admin()
 
-    def visualizza_ordini(self):
+    def visualizza_Ordini(self):
         pasti = ['primi', 'secondi', 'contorni']
         for pasto in pasti:
             print("\nOrdini per i {}:".format(pasto))
@@ -220,14 +220,14 @@ class Admin():
 
         input('\nPremi invio per tornare al menu')
 
-        self.Menu_Admin()
+        self.menu_Admin()
 
-    def reset_utenti(self):
+    def reset_Utenti(self):
         with open('utenti.txt', 'w') as file_utenti:
             file_utenti.write('')
         print('\nLista utenti prenotati svuotata con successo.')
         input('\nPremi invio per tornare al menu')
-        self.Menu_Admin()
+        self.menu_Admin()
 
 
 class Mensa():
