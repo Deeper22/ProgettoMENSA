@@ -224,6 +224,7 @@ class Admin():
                     print("{}: {}".format(menu.__dict__[pasto][idx], ordine))
 
         input('\nPremi invio per tornare al menu')
+
         self.Menu_Admin()
 
     def reset_utenti(self):
@@ -267,8 +268,8 @@ menu = Menu()
 
 
 def Login():
-    print('\n\tLOGIN')
-    login_digit = input('Accedi come:\n1. Utente\n2. Admin\n')
+    print('\n\tLOGIN\n')
+    login_digit = input('Accedi come (inserisci numero):\n1. Utente\n2. Admin\n')
     while (login_digit != '1') and (login_digit != '2'):
         login_digit = input('Inserimento non valido. Riprova: ')
 
