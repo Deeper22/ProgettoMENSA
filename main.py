@@ -2,7 +2,6 @@ import sys
 import time
 import pickle
 
-
 class Utente():
 
     def ControlloSTR(self, stringa):
