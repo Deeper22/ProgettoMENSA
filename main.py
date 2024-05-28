@@ -8,11 +8,13 @@ class Utente():
         while any(lettera.isdigit() for lettera in stringa) or len(stringa) == 0:
             print('Errore! Inserire stringa non vuota')
             stringa = input()
+        return stringa
 
     def ControlloMTR(self, matr):
         while not matr.isdigit() or len(matr) != 7:
             print('Errore! Inserisci numero di 7 cifre')
             matr = input('Inserisci matricola: ')
+        return matr
 
     def __init__(self):
 
@@ -35,29 +37,26 @@ class Utente():
 
         #INSERIMENTO E CONTROLLO NOME
         nome = input('Inserisci nome: ')
-        self.ControlloSTR(nome)
-        self.nome = nome
+        self.nome = self.ControlloSTR(nome)
 
         #INSERIMENTO E CONTROLLO COGNOME
         cognome = input('Inserisci cognome: ')
-        self.ControlloSTR(cognome)
-        self.cognome = cognome
+        self.cognome = self.ControlloSTR(cognome)
 
         #INSERIMENTO E CONTROLLO MATRICOLA
         matricola = input('Inserisci matricola: ')
-        self.ControlloMTR(matricola)
-        self.matricola = matricola
+        self.matricola = self.ControlloMTR(matricola)
 
         with open('utenti.txt', 'r') as file_utenti:
             for riga in file_utenti:
-                if riga.strip() == self.matricola:
+                if riga.strip() == ('{}-{}-{}'.format(self.nome,self.cognome,self.matricola)):
                     print('\nPrenotazione gia effetuata!')
                     sys.exit()
 
         self.controlla_posto()
 
         with open('utenti.txt', 'a') as file_utenti:
-            file_utenti.write(self.matricola + '\n')
+            file_utenti.write('{}-{}-{}\n'.format(self.nome,self.cognome,self.matricola))
 
         self.riepilogo_salvataggio()
 
@@ -82,11 +81,6 @@ class Utente():
     def aggiornaPickle(self, nome_file, vett_pickle):
         with open(nome_file + '.pkl', 'rb+') as nome_file:
             vett_temp = pickle.load(nome_file)
-            # if len(vett_temp) != len(vett_pickle):
-            #     nome_file.seek(0)   #Si porta il puntatore del file all'inizio per sovrascrivere
-            #     nome_file.truncate()   #Svuota il file
-            #     vett_temp = [0] * len(vett_pickle)
-            #     pickle.dump(vett_temp, nome_file)
             nome_file.seek(0)
             vett_pickle = [x + y for x, y in zip(vett_temp, vett_pickle)]
             pickle.dump(vett_pickle, nome_file)
@@ -107,13 +101,14 @@ class Utente():
             '\nHai scelto: {}, {}, {}.'.format(menu.primi[int(primo_scelto) - 1], menu.secondi[int(secondo_scelto) - 1],
                                                menu.contorni[int(contorno_scelto) - 1]))
         conferma = input('\nInviare ordine? (si/no): ')
-        while conferma != 'si' and conferma != 'no':
+        while conferma not in ('si', 'no'):
             conferma = input('Risposta non valida. Riprova: ')
         if conferma == 'si':
             print('Ordine inviato!')
             self.aggiornaPickle('primi', vettoreprimi)
             self.aggiornaPickle('secondi', vettoresecondi)
             self.aggiornaPickle('contorni', vettorecontorni)
+            sys.exit()
         else:
             self.riepilogo_salvataggio()
 
@@ -249,14 +244,6 @@ class Menu():
             self.primi = menu_pickle['primi']
             self.secondi = menu_pickle['secondi']
             self.contorni = menu_pickle['contorni']
-
-        # with open('menu.pkl', 'wb') as file_menu:
-        #     menu_pickle = {
-        #         'primi' : self.primi,
-        #         'secondi' : self.secondi,
-        #         'contorni' : self.contorni,
-        #     }
-        #     pickle.dump(menu_pickle, file_menu)
 
         self.contaprimo = [0 for x in self.primi]
         self.contasecondo = [0 for x in self.secondi]
