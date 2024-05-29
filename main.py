@@ -28,13 +28,14 @@ class Utente():
             input('\nPremi invio per tornare al login')
             Login()
         elif utente_digit == '2':
-            pass
+            self.prenota()
         elif utente_digit == '3':
             print('')
             Login()
         elif utente_digit == '4':
             sys.exit()
 
+    def prenota(self):
         #INSERIMENTO E CONTROLLO NOME
         nome = input('Inserisci nome: ')
         self.nome = self.controllo_Stringa(nome)
