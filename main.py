@@ -5,12 +5,18 @@ import pickle
 class Utente():
 
     def controllo_Stringa(self, stringa):
+
+        """Metodo con lo scopo di segnalare e dar modo di correggere errori nell'inserimento di nome e cognome utente"""
+
         while any(lettera.isdigit() for lettera in stringa) or len(stringa) == 0:
             print('Errore! Inserire stringa non vuota')
             stringa = input()
         return stringa
 
     def controllo_Matricola(self, matr):
+
+        """Metodo con lo scopo di segnalare e dar modo di correggere errori nell'inserimento della matricola"""
+
         while not matr.isdigit() or len(matr) != 7:
             print('Errore! Inserisci numero di 7 cifre')
             matr = input('Inserisci matricola: ')
@@ -36,11 +42,12 @@ class Utente():
             sys.exit()
 
     def prenota(self):
-        #INSERIMENTO E CONTROLLO NOME
+
+        """Permette all'utente di inserire i dati per la prenotazione e di procedere con l'ordine dei pasti; salva utenti prenotati in un file .txt"""
+
         nome = input('Inserisci nome: ')
         self.nome = self.controllo_Stringa(nome)
 
-        #INSERIMENTO E CONTROLLO COGNOME
         cognome = input('Inserisci cognome: ')
         self.cognome = self.controllo_Stringa(cognome)
 
@@ -61,8 +68,10 @@ class Utente():
 
         self.riepilogo_Salvataggio()
 
-    #CONTROLLO DISPONIBILITA POSTI IN MENSA
+
     def controlla_Posto(self):
+
+        """Controlla la disponibilità di un posto nella mensa e decrementa di 1 i posti restanti nel file pickle"""
 
         time.sleep(1)
 
@@ -80,43 +89,20 @@ class Utente():
             print('\nPosto disponibile!\nPosti ancora disponibili: ' + str(mensa.posti_disponibili))
 
     def aggiorna_Pickle(self, nome_file, vett_pickle):
+
+        """Metodo che permette di salvare l'ordine dell'utente nei file pickle"""
+
         with open(nome_file + '.pkl', 'rb+') as nome_file:
             vett_temp = pickle.load(nome_file)
             nome_file.seek(0)
             vett_pickle = [x + y for x, y in zip(vett_temp, vett_pickle)]
             pickle.dump(vett_pickle, nome_file)
 
-    #SCELTA DEI PIATTI DA MANGIARE
-    def riepilogo_Salvataggio(self):
-
-        time.sleep(1)
-        print('\n\tSCELTA PASTI')
-
-        vettoreprimi, primo_scelto = self.scelta(menu.primi, menu.contaprimo, 'primo')
-
-        vettoresecondi, secondo_scelto = self.scelta(menu.secondi, menu.contasecondo, 'secondo')
-
-        vettorecontorni, contorno_scelto = self.scelta(menu.contorni, menu.contacontorno, 'contorno')
-
-        print(
-            '\nHai scelto: {}, {}, {}.'.format(menu.primi[int(primo_scelto) - 1], menu.secondi[int(secondo_scelto) - 1],
-                                               menu.contorni[int(contorno_scelto) - 1]))
-        conferma = input('\nInviare ordine? (si/no): ')
-        while conferma not in ('si', 'no'):
-            conferma = input('Risposta non valida. Riprova: ')
-        if conferma == 'si':
-            print('Ordine inviato!')
-            self.aggiorna_Pickle('primi', vettoreprimi)
-            self.aggiorna_Pickle('secondi', vettoresecondi)
-            self.aggiorna_Pickle('contorni', vettorecontorni)
-            sys.exit()
-        else:
-            self.riepilogo_Salvataggio()
-
     def scelta(self, pietanza, vettore, tipo):
 
-        print('\nScegli ' + tipo + ': ')
+        """Gestisce l'ordinazione della singola portata"""
 
+        print('\nScegli ' + tipo + ': ')
         for i in range(len(pietanza)):
             print(str(i + 1) + ') ' + pietanza[i])
 
@@ -131,6 +117,35 @@ class Utente():
         return vettore, piatto_scelto
 
 
+    def riepilogo_Salvataggio(self):
+
+        """Metodo che si occupa della raccolta e salvataggio delle singole scelte"""
+
+        time.sleep(1)
+        print('\n\tSCELTA PASTI')
+
+        vettoreprimi, primo_scelto = self.scelta(menu.primi, menu.contaprimo, 'primo')
+
+        vettoresecondi, secondo_scelto = self.scelta(menu.secondi, menu.contasecondo, 'secondo')
+
+        vettorecontorni, contorno_scelto = self.scelta(menu.contorni, menu.contacontorno, 'contorno')
+
+        print('\nHai scelto: {}, {}, {}.'.format(menu.primi[int(primo_scelto) - 1], menu.secondi[int(secondo_scelto) - 1],
+                                               menu.contorni[int(contorno_scelto) - 1]))
+
+        conferma = input('\nInviare ordine? (si/no): ')
+        while conferma not in ('si', 'no'):
+            conferma = input('Risposta non valida. Riprova: ')
+        if conferma == 'si':
+            print('Ordine inviato!')
+            self.aggiorna_Pickle('primi', vettoreprimi)
+            self.aggiorna_Pickle('secondi', vettoresecondi)
+            self.aggiorna_Pickle('contorni', vettorecontorni)
+            sys.exit()
+        else:
+            self.riepilogo_Salvataggio()
+
+
 class Admin():
     def __init__(self):
 
@@ -143,6 +158,9 @@ class Admin():
         self.menu_Admin()
 
     def menu_Admin(self):
+
+        """Menu per la scelta dell'operazione amministratore"""
+
         print('\n\tMENU ADMIN\n')
         admin_digit = input(
             "1. Reset posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n"
@@ -165,6 +183,8 @@ class Admin():
 
     def reset_Posti(self):
 
+        "Consente di scegliere quanti posti rendere disponibili nella mensa"
+
         input_posti = input('Quanti posti vuoi rendere disponibili?: ')
         while not input_posti.isdigit():
             input_posti = input('Inserimento non valido. Riprova: ')
@@ -179,6 +199,9 @@ class Admin():
         self.menu_Admin()
 
     def cambia_Menu(self):
+
+        "Permette la modifica dei piatti disponibili ed esegue il reset degli ordini precedenti al cambiamento"
+
         print('\n\t  CAMBIO MENU\n(comporta il reset ordini)')
         primi_inseriti = input('\nDigita i primi da inserire, separati da una virgola:\n').split(',')
         secondi_inseriti = input('Digita i secondi da inserire, separati da una virgola:\n').split(',')
@@ -211,6 +234,9 @@ class Admin():
         self.menu_Admin()
 
     def visualizza_Ordini(self):
+
+        "Metodo per la visualizzazione degli ordini totali inviati alla mensa"
+
         pasti = ['primi', 'secondi', 'contorni']
         for pasto in pasti:
             print("\nOrdini per i {}:".format(pasto))
@@ -224,6 +250,9 @@ class Admin():
         self.menu_Admin()
 
     def reset_Utenti(self):
+
+        "Consente all'amministratore di eseguire un reset degli utenti gia prenotati"
+
         with open('utenti.txt', 'w') as file_utenti:
             file_utenti.write('')
         print('\nLista utenti prenotati svuotata con successo.')
