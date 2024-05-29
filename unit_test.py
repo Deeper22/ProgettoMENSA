@@ -1,8 +1,8 @@
 import unittest
-from main import Persona
+from main import Utente, Admin, Menu
 
 
-class MyTestCase(unittest.TestCase):
+class (unittest.TestCase):
     def test_something(self):
         self.assertEqual(True, False)  # add assertion here
 

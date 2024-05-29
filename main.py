@@ -30,9 +30,7 @@ class Utente():
         while utente_digit not in ('1', '2', '3', '4'):
             utente_digit = input('\nInserimento non valido. Riprova: ')
         if utente_digit == '1':
-            print('Primi: {}\nSecondi: {}\nContorni: {}'.format(', '.join(menu.primi), ', '.join(menu.secondi), ', '.join(menu.contorni)))
-            input('\nPremi invio per tornare al login')
-            Login()
+            self.leggi_menu()
         elif utente_digit == '2':
             self.prenota()
         elif utente_digit == '3':
@@ -40,6 +38,15 @@ class Utente():
             Login()
         elif utente_digit == '4':
             sys.exit()
+
+    def leggi_menu(self):
+
+        """Permette all'utente di leggere il menu prima della prenotazione"""
+
+        print('Primi: {}\nSecondi: {}\nContorni: {}'.format(', '.join(menu.primi), ', '.join(menu.secondi),
+                                                            ', '.join(menu.contorni)))
+        input('\nPremi invio per tornare al login')
+        Login()
 
     def prenota(self):
 
@@ -163,7 +170,7 @@ class Admin():
 
         print('\n\tMENU ADMIN\n')
         admin_digit = input(
-            "1. Reset posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n"
+            "1. Libera posti mensa\n2. Cambia menu\n3. Visualizza totale ordini\n4. Reset utenti prenotati\n"
             "5. Ritorna al login\n6. Esci dal programma\n\nInserisci numero dell'operazione desiderata: ")
         while admin_digit not in ('1', '2', '3', '4', '5', '6'):
             admin_digit = input('Inserimento non valido. Riprova: ')
@@ -279,10 +286,8 @@ class Menu():
         self.contasecondo = [0 for x in self.secondi]
         self.contacontorno = [0 for x in self.contorni]
 
-
 mensa = Mensa()
 menu = Menu()
-
 
 def Login():
     print('\n\tLOGIN\n')
