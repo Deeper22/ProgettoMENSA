@@ -2,9 +2,22 @@ import unittest
 from main import Utente, Admin, Menu
 
 
-class (unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)  # add assertion here
+class TestUtente(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        print('Sto eseguendo il setup principale')
+
+    @classmethod
+    def tearDownClass(cls):
+        print('Sto eseguendo il teardown principale')
+
+    def setUp(self):
+        self.utente1 = Utente('Valerio', 'Clementi', 1234567)
+        print('Sto eseguendo il setup')
+
+    def tearDown(self):
+        print('Sto eseguendo il teardown')
 
 
 if __name__ == '__main__':
