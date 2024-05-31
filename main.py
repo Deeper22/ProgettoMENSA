@@ -301,4 +301,5 @@ def Login():
         admin1 = Admin()
 
 
-Login()
+if __name__ == '__main__':
+    Login()
