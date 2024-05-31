@@ -10,7 +10,7 @@ class Utente():
 
         while any(lettera.isdigit() for lettera in stringa) or len(stringa) == 0:
             print('Errore! Inserire stringa non vuota')
-            stringa = input()
+            stringa = input('Ripeti inserimento: ')
         return stringa
 
     def controllo_Matricola(self, matr):
@@ -235,6 +235,11 @@ class Admin():
             with open(pasto + '.pkl', 'wb') as file_ordine:
                 pickle.dump([0] * len(menu.__dict__[pasto]), file_ordine)
 
+        # BUG INDEX
+        menu.contaprimo = [0 for _ in menu.primi]
+        menu.contasecondo = [0 for _ in menu.secondi]
+        menu.contacontorno = [0 for _ in menu.contorni]
+
         print('\nMenu aggiornato e ordini resettati con successo!')
 
         input('\nPremi invio per tornare al menu')
@@ -251,8 +256,8 @@ class Admin():
                 vett_ordini = pickle.load(file_ordine)
                 for idx, ordine in enumerate(vett_ordini):
                     print("{}: {}".format(menu.__dict__[pasto][idx], ordine))
-
-        input('\nPremi invio per tornare al menu')
+        print('')
+        input('Premi invio per tornare al menu')
 
         self.menu_Admin()
 
