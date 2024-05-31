@@ -236,9 +236,9 @@ class Admin():
                 pickle.dump([0] * len(menu.__dict__[pasto]), file_ordine)
 
         # BUG INDEX
-        menu.contaprimo = [0 for _ in menu.primi]
-        menu.contasecondo = [0 for _ in menu.secondi]
-        menu.contacontorno = [0 for _ in menu.contorni]
+        menu.contaprimo = [0 for y in menu.primi]
+        menu.contasecondo = [0 for y in menu.secondi]
+        menu.contacontorno = [0 for y in menu.contorni]
 
         print('\nMenu aggiornato e ordini resettati con successo!')
 
